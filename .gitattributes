@@ -3,3 +3,8 @@
 /git-filter-repo eol=lf
 /contrib/filter-repo-demos/[a-z]* eol=lf
 /t/t9*/* eol=lf
+
+# C# dosyalarını öne çıkar
+*.cs linguist-language=C#
+*.csproj linguist-language=C#
+*.sln linguist-language=C#
