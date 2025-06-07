@@ -4,12 +4,18 @@
 /contrib/filter-repo-demos/[a-z]* eol=lf
 /t/t9*/* eol=lf
 
-# C# dosyaları için yapılandırma
-*.cs linguist-language=C#
-*.csproj linguist-language=C#
-*.sln linguist-language=C#
-*.cshtml linguist-language=C#
-*.razor linguist-language=C#
+# C# dosyaları için yapılandırma (yüksek öncelik)
+*.cs linguist-language=C# linguist-detectable=true
+*.csproj linguist-language=C# linguist-detectable=true
+*.sln linguist-language=C# linguist-detectable=true
+*.cshtml linguist-language=C# linguist-detectable=true
+*.razor linguist-language=C# linguist-detectable=true
+
+# Diğer dosyalar için yapılandırma (düşük öncelik)
+*.py linguist-detectable=false
+*.md linguist-detectable=false
+*.txt linguist-detectable=false
+*.sh linguist-detectable=false
 
 # Satır sonu karakterleri için yapılandırma
 *.cs text eol=crlf
