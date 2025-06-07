@@ -4,20 +4,26 @@
 /contrib/filter-repo-demos/[a-z]* eol=lf
 /t/t9*/* eol=lf
 
-# C# dosyaları için yapılandırma
-*.cs linguist-language=C# linguist-detectable=true
-*.csproj linguist-language=C# linguist-detectable=true
-*.sln linguist-language=C# linguist-detectable=true
+# C# dosyaları
+*.cs linguist-language=C#
+*.csproj linguist-language=C#
+*.sln linguist-language=C#
 
-# HTML/CSS dosyaları için yapılandırma
-*.cshtml linguist-language=HTML linguist-detectable=true
-*.css linguist-language=CSS linguist-detectable=true
+# Razor/HTML dosyaları
+*.cshtml linguist-language=C#
 
-# JavaScript dosyaları için yapılandırma
-*.js linguist-language=JavaScript linguist-detectable=true
+# CSS dosyaları
+*.css linguist-language=CSS
 
-# JSON dosyaları için yapılandırma
-*.json linguist-language=JSON linguist-detectable=true
+# JavaScript dosyaları
+*.js linguist-language=JavaScript
+
+# JSON dosyaları
+*.json linguist-language=JSON
+
+# Kütüphane dosyalarını dil istatistiklerinden çıkar
+wwwroot/lib/** linguist-vendored=true
+wwwroot/lib/** linguist-detectable=false
 
 # Python dosyalarını dil istatistiklerinden çıkar
 *.py linguist-detectable=false
