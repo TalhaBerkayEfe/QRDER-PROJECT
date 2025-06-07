@@ -8,8 +8,16 @@
 *.cs linguist-language=C# linguist-detectable=true
 *.csproj linguist-language=C# linguist-detectable=true
 *.sln linguist-language=C# linguist-detectable=true
-*.cshtml linguist-language=C# linguist-detectable=true
-*.razor linguist-language=C# linguist-detectable=true
+
+# HTML/CSS dosyaları için yapılandırma
+*.cshtml linguist-language=HTML linguist-detectable=true
+*.css linguist-language=CSS linguist-detectable=true
+
+# JavaScript dosyaları için yapılandırma
+*.js linguist-language=JavaScript linguist-detectable=true
+
+# JSON dosyaları için yapılandırma
+*.json linguist-language=JSON linguist-detectable=true
 
 # Python dosyalarını dil istatistiklerinden çıkar
 *.py linguist-detectable=false
@@ -18,20 +26,25 @@ git_filter_repo.py linguist-detectable=false
 
 # Tüm diğer dosyaları dil istatistiklerinden çıkar
 * linguist-detectable=false
-*.cs linguist-detectable=true
 *.csproj linguist-detectable=true
 *.sln linguist-detectable=true
 *.cshtml linguist-detectable=true
-*.razor linguist-language=C# linguist-detectable=true
+*.css linguist-detectable=true
+*.js linguist-detectable=true
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.gitattributes text eol=lf
+*.gitignore text eol=lf
 
 # Satır sonu karakterleri için yapılandırma
 *.cs text eol=crlf
 *.csproj text eol=crlf
 *.sln text eol=crlf
 *.cshtml text eol=crlf
-*.razor text eol=crlf
+*.css text eol=crlf
+*.js text eol=crlf
 *.json text eol=crlf
-*.config text eol=crlf
 *.md text eol=lf
 *.yml text eol=lf
 *.yaml text eol=lf
