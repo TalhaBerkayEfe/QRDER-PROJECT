@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Ana Sayfa";
+}
+
+<style>
+    .menu-button {
+        display: inline-block;
+        padding: 1rem 2rem;
+        margin: 2rem 0;
+        background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .menu-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    .welcome-text {
+        color: #333;
+        margin-bottom: 2rem;
+    }
+</style>
+
+<div class="text-center">
+    <h1 class="display-4">QRDER'a Hoş Geldiniz</h1>
+    <p class="welcome-text">Restoranımızın menüsünü görüntülemek için aşağıdaki butona tıklayabilirsiniz.</p>
+    
+    <a href="/Data/Index" class="menu-button">
+        Menüyü Görüntüle
+    </a>
+</div>

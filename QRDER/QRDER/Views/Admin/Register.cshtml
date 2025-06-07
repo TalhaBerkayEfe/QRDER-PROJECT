@@ -1,0 +1,266 @@
+@model QRDER.Models.Data.AdminGirisi
+@{
+    ViewData["Title"] = "Admin Kayıt";
+}
+
+<style>
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+        padding: 2rem;
+    }
+
+    .login-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 2rem;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transform: translateY(20px);
+        opacity: 0;
+        animation: slideUp 0.5s ease forwards;
+    }
+
+    @@keyframes slideUp {
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .login-title {
+        color: #2f3542;
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        letter-spacing: 1px;
+    }
+
+    .login-subtitle {
+        color: #747d8c;
+        font-size: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+
+    .form-label {
+        color: #2f3542;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+        transition: all 0.3s ease;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    .form-control:focus {
+        border-color: #1a2a6c;
+        box-shadow: 0 0 0 3px rgba(26, 42, 108, 0.1);
+        outline: none;
+    }
+
+    .form-control::placeholder {
+        color: #a0aec0;
+    }
+
+    .input-icon {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus + .input-icon {
+        color: #1a2a6c;
+    }
+
+    .login-button {
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(45deg, #1a2a6c, #b21f1f);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .login-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            120deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+        transition: all 0.6s;
+    }
+
+    .login-button:hover::before {
+        left: 100%;
+    }
+
+    .login-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(26, 42, 108, 0.3);
+    }
+
+    .login-button:active {
+        transform: translateY(0);
+    }
+
+    .validation-message {
+        color: #e53e3e;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        display: block;
+        animation: shake 0.5s ease;
+    }
+
+    @@keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+
+    .form-floating {
+        position: relative;
+    }
+
+    .form-floating > .form-control {
+        height: calc(3.5rem + 2px);
+        padding: 1rem 0.75rem;
+    }
+
+    .form-floating > label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        padding: 1rem 0.75rem;
+        pointer-events: none;
+        border: 1px solid transparent;
+        transform-origin: 0 0;
+        transition: opacity .1s ease-in-out,transform .1s ease-in-out;
+    }
+
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label {
+        transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
+        color: #1a2a6c;
+    }
+
+    .login-link {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(135deg, #2f3542, #57606f);
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .login-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1 class="login-title">Admin Kayıt</h1>
+            <p class="login-subtitle">Yönetim paneline erişim için hesap oluşturun</p>
+        </div>
+        
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-group">
+                <div class="form-floating">
+                    <input asp-for="KullaniciAdi" class="form-control" placeholder="Kullanıcı Adı" />
+                    <label asp-for="KullaniciAdi">Kullanıcı Adı</label>
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                <span asp-validation-for="KullaniciAdi" class="validation-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <div class="form-floating">
+                    <input asp-for="Sifre" type="password" class="form-control" placeholder="Şifre" />
+                    <label asp-for="Sifre">Şifre</label>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                <span asp-validation-for="Sifre" class="validation-message"></span>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="login-button">
+                    <i class="fas fa-user-plus me-2"></i>Kayıt Ol
+                </button>
+            </div>
+            
+            <div class="form-group text-center mt-3">
+                <p class="mb-2">Zaten hesabınız var mı?</p>
+                <a href="/Admin/Login" class="login-link">
+                    <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Input alanlarına odaklanıldığında animasyon
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
+    </script>
+} 

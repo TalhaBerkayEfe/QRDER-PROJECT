@@ -1,0 +1,43 @@
+@model QRDER.Models.Data.Tatlilar
+@{
+    ViewData["Title"] = "Yeni Tatlı Ekle";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center">Yeni Tatlı Ekle</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddTatli" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Tatlilar1">Tatlı Adı</label>
+                            <input asp-for="Tatlilar1" class="form-control" />
+                            <span asp-validation-for="Tatlilar1" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TatlilarFiyat">Fiyat</label>
+                            <input asp-for="TatlilarFiyat" class="form-control" />
+                            <span asp-validation-for="TatlilarFiyat" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="TatlilarGorsel">Tatlı Görseli</label>
+                            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                            <span asp-validation-for="TatlilarGorsel" class="text-danger"></span>
+                        </div>
+                        <div class="form-group text-center mt-3">
+                            <button type="submit" class="btn btn-success">Ekle</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

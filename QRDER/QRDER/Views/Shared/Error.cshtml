@@ -1,0 +1,12 @@
+﻿@model string
+@{
+    ViewData["Title"] = "Hata";
+}
+
+<div class="container mt-4">
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">Bir hata oluştu!</h4>
+        <p>@Model</p>
+    </div>
+    <a href="/Data" class="btn btn-primary">Tekrar Dene</a>
+</div>

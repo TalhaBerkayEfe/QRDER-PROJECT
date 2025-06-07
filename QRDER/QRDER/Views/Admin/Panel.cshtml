@@ -1,0 +1,586 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Admin Paneli";
+    var anaYemekler = ViewData["AnaYemekler"] as List<QRDER.Models.Data.AnaYemek>;
+    var araYemekler = ViewData["AraYemekler"] as List<QRDER.Models.Data.AraYemek>;
+    var icecekler = ViewData["Icecekler"] as List<QRDER.Models.Data.Icecekler>;
+    var tatlilar = ViewData["Tatlilar"] as List<QRDER.Models.Data.Tatlilar>;
+    var siparisler = ViewData["Siparisler"] as List<QRDER.Models.Data.Siparisler>;
+}
+
+<style>
+    .admin-container {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f6f8fd, #f1f4f9);
+        padding: 2rem;
+    }
+
+    .sidebar {
+        background: white;
+        border-radius: 20px;
+        padding: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        height: calc(100vh - 4rem);
+        position: sticky;
+        top: 2rem;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-item {
+        padding: 1rem 1.5rem;
+        margin: 0.5rem 0;
+        border-radius: 12px;
+        color: #2f3542;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .sidebar-item i {
+        margin-right: 1rem;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .sidebar-item:hover {
+        background: rgba(26, 42, 108, 0.05);
+        transform: translateX(5px);
+    }
+
+    .sidebar-item.active {
+        background: linear-gradient(45deg, #1a2a6c, #b21f1f);
+        color: white;
+    }
+
+    .sidebar-item.active i {
+        transform: scale(1.1);
+    }
+
+    .content-area {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        min-height: calc(100vh - 4rem);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #2f3542;
+        margin: 0;
+    }
+
+    .add-button {
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(45deg, #1a2a6c, #b21f1f);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .add-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(26, 42, 108, 0.2);
+        color: white;
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .table {
+        margin: 0;
+    }
+
+    .table thead th {
+        background: #f8f9fa;
+        border: none;
+        padding: 1rem;
+        font-weight: 600;
+        color: #2f3542;
+    }
+
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background: rgba(26, 42, 108, 0.02);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .action-button {
+        padding: 0.5rem;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .edit-button {
+        background: #2ed573;
+    }
+
+    .delete-button {
+        background: #ff4757;
+    }
+
+    .action-button:hover {
+        transform: scale(1.1);
+    }
+
+    .item-image {
+        width: 60px;
+        height: 60px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .tab-pane {
+        animation: fadeIn 0.5s ease;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .price-badge {
+        background: rgba(46, 213, 115, 0.1);
+        color: #2ed573;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    .order-status {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .status-beklemede {
+        background: #ffeaa7;
+        color: #d35400;
+    }
+
+    .status-onaylandi {
+        background: #55efc4;
+        color: #00b894;
+    }
+
+    .status-reddedildi {
+        background: #ff7675;
+        color: #d63031;
+    }
+
+    .order-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .order-action-btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .approve-btn {
+        background: #00b894;
+    }
+
+    .reject-btn {
+        background: #d63031;
+    }
+
+    .order-action-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="admin-container">
+    <div class="row">
+        <!-- Sol Menü -->
+        <div class="col-md-3">
+            <div class="sidebar">
+                <a href="#siparisler" class="sidebar-item active" data-bs-toggle="tab" role="tab">
+                    <i class="fas fa-shopping-cart"></i>
+                    Siparişler
+                </a>
+                <a href="#anaYemekler" class="sidebar-item" data-bs-toggle="tab" role="tab">
+                    <i class="fas fa-utensils"></i>
+                    Ana Yemekler
+                </a>
+                <a href="#araYemekler" class="sidebar-item" data-bs-toggle="tab" role="tab">
+                    <i class="fas fa-hamburger"></i>
+                    Ara Yemekler
+                </a>
+                <a href="#icecekler" class="sidebar-item" data-bs-toggle="tab" role="tab">
+                    <i class="fas fa-glass-martini-alt"></i>
+                    İçecekler
+                </a>
+                <a href="#tatlilar" class="sidebar-item" data-bs-toggle="tab" role="tab">
+                    <i class="fas fa-ice-cream"></i>
+                    Tatlılar
+                </a>
+            </div>
+        </div>
+
+        <!-- Sağ İçerik -->
+        <div class="col-md-9">
+            <div class="content-area">
+                <div class="tab-content">
+                    <!-- Siparişler Sekmesi -->
+                    <div class="tab-pane fade show active" id="siparisler" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">Siparişler</h2>
+                        </div>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Sipariş ID</th>
+                                        <th>Masa No</th>
+                                        <th>Sipariş Detayı</th>
+                                        <th>Toplam Fiyat</th>
+                                        <th>Tarih</th>
+                                        <th>Durum</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var siparis in siparisler)
+                                    {
+                                        <tr>
+                                            <td>@siparis.SiparisId</td>
+                                            <td>@siparis.MasaNo</td>
+                                            <td>@siparis.SiparisDetay</td>
+                                            <td><span class="price-badge">@siparis.ToplamFiyat TL</span></td>
+                                            <td>@siparis.SiparisTarihi?.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>
+                                                <span class="order-status status-@siparis.Durum?.ToLower()">
+                                                    @siparis.Durum
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if (siparis.Durum == "Beklemede")
+                                                {
+                                                    <div class="order-actions">
+                                                        <button class="order-action-btn approve-btn" onclick="updateOrderStatus(@siparis.SiparisId, 'Onaylandı')">
+                                                            <i class="fas fa-check"></i> Onayla
+                                                        </button>
+                                                        <button class="order-action-btn reject-btn" onclick="updateOrderStatus(@siparis.SiparisId, 'Reddedildi')">
+                                                            <i class="fas fa-times"></i> Reddet
+                                                        </button>
+                                                    </div>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Ana Yemekler Sekmesi -->
+                    <div class="tab-pane fade show active" id="anaYemekler" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">Ana Yemekler</h2>
+                            <a href="@Url.Action("AddAnaYemek")" class="add-button">
+                                <i class="fas fa-plus"></i> Yeni Ekle
+                            </a>
+                        </div>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Görsel</th>
+                                        <th>Yemek Adı</th>
+                                        <th>Fiyat</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in anaYemekler)
+                                    {
+                                        <tr>
+                                            <td>@item.AnaYemekId</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.AnaYemekGorsel))
+                                                {
+                                                    <img src="@item.AnaYemekGorsel" alt="@item.AnaYemek1" class="item-image">
+                                                }
+                                            </td>
+                                            <td>@item.AnaYemek1</td>
+                                            <td><span class="price-badge">@item.AnaYemekFiyat TL</span></td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a href="@Url.Action("EditAnaYemek", new { id = item.AnaYemekId })" class="action-button edit-button">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="@Url.Action("DeleteAnaYemek", new { id = item.AnaYemekId })" class="action-button delete-button" onclick="return confirm('Bu öğeyi silmek istediğinizden emin misiniz?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Ara Yemekler Sekmesi -->
+                    <div class="tab-pane fade" id="araYemekler" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">Ara Yemekler</h2>
+                            <a href="@Url.Action("AddAraYemek")" class="add-button">
+                                <i class="fas fa-plus"></i> Yeni Ekle
+                            </a>
+                        </div>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Görsel</th>
+                                        <th>Yemek Adı</th>
+                                        <th>Fiyat</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in araYemekler)
+                                    {
+                                        <tr>
+                                            <td>@item.AraYemekId</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.AraYemekGorsel))
+                                                {
+                                                    <img src="@item.AraYemekGorsel" alt="@item.AraYemek1" class="item-image">
+                                                }
+                                            </td>
+                                            <td>@item.AraYemek1</td>
+                                            <td><span class="price-badge">@item.AraYemekFiyat TL</span></td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a href="@Url.Action("EditAraYemek", new { id = item.AraYemekId })" class="action-button edit-button">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="@Url.Action("DeleteAraYemek", new { id = item.AraYemekId })" class="action-button delete-button" onclick="return confirm('Bu öğeyi silmek istediğinizden emin misiniz?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- İçecekler Sekmesi -->
+                    <div class="tab-pane fade" id="icecekler" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">İçecekler</h2>
+                            <a href="@Url.Action("AddIcecek")" class="add-button">
+                                <i class="fas fa-plus"></i> Yeni Ekle
+                            </a>
+                        </div>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Görsel</th>
+                                        <th>İçecek Adı</th>
+                                        <th>Fiyat</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in icecekler)
+                                    {
+                                        <tr>
+                                            <td>@item.İcecekId</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.IceceklerGorsel))
+                                                {
+                                                    <img src="@item.IceceklerGorsel" alt="@item.Icecekler1" class="item-image">
+                                                }
+                                            </td>
+                                            <td>@item.Icecekler1</td>
+                                            <td><span class="price-badge">@item.IceceklerFiyat TL</span></td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a href="@Url.Action("EditIcecek", new { id = item.İcecekId })" class="action-button edit-button">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="@Url.Action("DeleteIcecek", new { id = item.İcecekId })" class="action-button delete-button" onclick="return confirm('Bu öğeyi silmek istediğinizden emin misiniz?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tatlılar Sekmesi -->
+                    <div class="tab-pane fade" id="tatlilar" role="tabpanel">
+                        <div class="section-header">
+                            <h2 class="section-title">Tatlılar</h2>
+                            <a href="@Url.Action("AddTatli")" class="add-button">
+                                <i class="fas fa-plus"></i> Yeni Ekle
+                            </a>
+                        </div>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Görsel</th>
+                                        <th>Tatlı Adı</th>
+                                        <th>Fiyat</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in tatlilar)
+                                    {
+                                        <tr>
+                                            <td>@item.TatlilarId</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(item.TatlilarGorsel))
+                                                {
+                                                    <img src="@item.TatlilarGorsel" alt="@item.Tatlilar1" class="item-image">
+                                                }
+                                            </td>
+                                            <td>@item.Tatlilar1</td>
+                                            <td><span class="price-badge">@item.TatlilarFiyat TL</span></td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a href="@Url.Action("EditTatli", new { id = item.TatlilarId })" class="action-button edit-button">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a href="@Url.Action("DeleteTatli", new { id = item.TatlilarId })" class="action-button delete-button" onclick="return confirm('Bu öğeyi silmek istediğinizden emin misiniz?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // URL'den hash'i al ve ilgili sekmeyi göster
+            var hash = window.location.hash;
+            if (hash) {
+                $('.sidebar-item[href="' + hash + '"]').tab('show');
+            }
+
+            // Sidebar item tıklama olayı
+            $('.sidebar-item').click(function(e) {
+                e.preventDefault();
+                var target = $(this).attr('href');
+                
+                // Aktif sınıfını güncelle
+                $('.sidebar-item').removeClass('active');
+                $(this).addClass('active');
+                
+                // Tab'ı göster
+                $('.tab-pane').removeClass('show active');
+                $(target).addClass('show active');
+                
+                // URL'yi güncelle
+                window.location.hash = target;
+            });
+        });
+
+        function updateOrderStatus(siparisId, yeniDurum) {
+            if (!confirm('Sipariş durumunu ' + yeniDurum + ' olarak güncellemek istediğinizden emin misiniz?')) {
+                return;
+            }
+
+            fetch('/Admin/UpdateOrderStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    siparisId: siparisId,
+                    durum: yeniDurum
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Sipariş durumu güncellenirken bir hata oluştu!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Sipariş durumu güncellenirken bir hata oluştu!');
+            });
+        }
+    </script>
+} 
